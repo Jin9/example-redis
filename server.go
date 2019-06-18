@@ -6,5 +6,5 @@ import (
 
 func main() {
 	e := router.Init()
-	e.Start(":8901")
+	e.Logger.Fatal(e.Start(":8901"))
 }

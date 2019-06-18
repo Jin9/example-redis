@@ -7,7 +7,12 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-// CreateUser is controller for create user
-func CreateUser(c echo.Context) error {
+// RegisterUser is controller for register user
+func RegisterUser(c echo.Context) error {
+	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
+}
+
+// GetUserInfomation is
+func GetUserInfomation(c echo.Context) error {
 	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
 }
