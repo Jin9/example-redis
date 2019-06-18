@@ -19,7 +19,7 @@ func Init() *echo.Echo {
 	v1 := e.Group("api/v1")
 	{
 		v1.POST("/user", controller.RegisterUser)
-		v1.GET("/user", controller.GetUserInfomation)
+		v1.GET("/user", controller.LoginUser)
 	}
 
 	return e
