@@ -24,7 +24,3 @@ func Init() *echo.Echo {
 	
 	return e
 }
-
-func mainHandler(c echo.Context) error {
-	return c.String(fasthttp.StatusOK, "Hello, World")
-}
