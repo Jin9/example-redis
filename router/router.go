@@ -1,6 +1,5 @@
 package router
 
-
 import (
 	"wasabi/controller"
 
@@ -21,6 +20,6 @@ func Init() *echo.Echo {
 	{
 		v1.GET("/user", controller.CreateUser)
 	}
-	
+
 	return e
 }
