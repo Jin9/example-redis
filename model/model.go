@@ -5,3 +5,11 @@ type CreateUserResponse struct{
 	Status string `json:"status"`
 	StatusDesc string `json:"statusDesc"`
 }
+
+// NewCreateUserResponse used for create `CreateUserResponse`
+func NewCreateUserResponse(status string, statusDesc string) *CreateUserResponse {
+	return &CreateUserResponse{
+		Status: status,
+		StatusDesc: statusDesc, 
+	}
+}

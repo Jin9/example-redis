@@ -2,6 +2,8 @@ package router
 
 
 import (
+	"wasabi/controller"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/valyala/fasthttp"
@@ -17,7 +19,7 @@ func Init() *echo.Echo {
 
 	v1 := e.Group("api/v1")
 	{
-		v1.GET("/user", mainHandler)
+		v1.GET("/user", controller.CreateUser)
 	}
 	
 	return e
