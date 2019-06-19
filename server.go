@@ -13,4 +13,7 @@ func init() {
 func main() {
 	// e := router.Init()
 	// e.Logger.Fatal(e.Start(":8880"))
+
+	// db.ExampleNewClient()
+	// db.ExampleClient()
 }

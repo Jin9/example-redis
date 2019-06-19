@@ -7,11 +7,12 @@ import (
 )
 
 var (
-	client *redis
+	client *redis.Client
 )
 
+// ExampleNewClient is use for connect redis
 func ExampleNewClient() {
-	client := redis.NewClient(&redis.Options{
+	client = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
@@ -22,6 +23,7 @@ func ExampleNewClient() {
 	// Output: PONG <nil>
 }
 
+// ExampleClient is used for example store key
 func ExampleClient() {
 	err := client.Set("key", "value", 0).Err()
 	if err != nil {
