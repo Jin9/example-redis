@@ -1,13 +1,10 @@
 package main
 
-import (
-	"wasabi/service"
-)
-
+// "wasabi/service"
 // "wasabi/router"
 
 func init() {
-	service.InitTimeLocation()
+	// service.InitTimeLocation()
 }
 
 func main() {

@@ -1,49 +1,63 @@
 package db
 
 import (
-	"fmt"
+	"log"
+	"time"
 
 	"github.com/go-redis/redis"
 )
 
-var (
-	client *redis.Client
+const (
+	addr     = "localhost:6379"
+	password = ""
+	db       = 0
 )
 
-// ExampleNewClient is use for connect redis
-func ExampleNewClient() {
-	client = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+func createNewClient() (*redis.Client, error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: password,
+		DB:       db,
 	})
 
-	pong, err := client.Ping().Result()
-	fmt.Println(pong, err)
-	// Output: PONG <nil>
+	_, err := client.Ping().Result()
+	if err != nil {
+		return nil, err
+	}
+
+	return client, nil
 }
 
-// ExampleClient is used for example store key
-func ExampleClient() {
-	err := client.Set("key", "value", 0).Err()
+// SetData is used for store data to redis
+func SetData(key string, value string, dur time.Duration) (err error) {
+	client, err := createNewClient()
+
 	if err != nil {
 		panic(err)
 	}
 
-	val, err := client.Get("key").Result()
+	err = client.Set(key, value, dur).Err()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("key", val)
 
-	val2, err := client.Get("key2").Result()
+	return nil
+}
+
+// GetData is used for get data from redis
+func GetData(key string) string {
+	client, err := createNewClient()
+
+	if err != nil {
+		panic(err)
+	}
+
+	value, err := client.Get(key).Result()
 	if err == redis.Nil {
-		fmt.Println("key2 does not exist")
+		log.Panicln(err.Error())
 	} else if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("key2", val2)
+		log.Panicln(err.Error())
 	}
-	// Output: key value
-	// key2 does not exist
+
+	return value
 }
