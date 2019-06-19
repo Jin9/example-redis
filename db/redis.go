@@ -29,7 +29,7 @@ func createNewClient() (*redis.Client, error) {
 }
 
 // SetData is used for store data to redis
-func SetData(key string, value string, dur time.Duration) (err error) {
+func SetData(key string, value interface{}, dur time.Duration) (err error) {
 	client, err := createNewClient()
 
 	if err != nil {
