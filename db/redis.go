@@ -1,7 +1,7 @@
 package db
 
 import (
-	"log"
+	"errors"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -29,35 +29,35 @@ func createNewClient() (*redis.Client, error) {
 }
 
 // SetData is used for store data to redis
-func SetData(key string, value interface{}, dur time.Duration) (err error) {
+func SetData(key string, value interface{}, dur time.Duration) error {
 	client, err := createNewClient()
 
 	if err != nil {
-		panic(err)
+		return errors.New("Connect to redis fail")
 	}
 
 	err = client.Set(key, value, dur).Err()
 	if err != nil {
-		panic(err)
+		return errors.New("Cannot set value to memory")
 	}
 
 	return nil
 }
 
 // GetData is used for get data from redis
-func GetData(key string) string {
+func GetData(key string) (string, error) {
 	client, err := createNewClient()
 
 	if err != nil {
-		log.Panicln(err)
+		return "", errors.New("Connect to redis fail")
 	}
 
 	value, err := client.Get(key).Result()
 	if err == redis.Nil {
-		log.Panicln(err.Error())
+		return "", errors.New("Key is not exists")
 	} else if err != nil {
-		log.Panicln(err.Error())
+		return "", errors.New("Cannot get value from memory")
 	}
 
-	return value
+	return value, nil
 }
