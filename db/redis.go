@@ -49,7 +49,7 @@ func GetData(key string) string {
 	client, err := createNewClient()
 
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	value, err := client.Get(key).Result()
