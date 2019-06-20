@@ -12,7 +12,7 @@ func RegisterUser(c echo.Context) error {
 	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
 }
 
-// LoginUser is controller for log-in user
-func LoginUser(c echo.Context) error {
-	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
-}
+// // LoginUser is controller for log-in user
+// func LoginUser(c echo.Context) error {
+// 	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
+// }

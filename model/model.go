@@ -1,13 +1,32 @@
 package model
 
-// User is
-type User struct {
+// RegisterUserRequest is represent model of CreateUser Request
+type RegisterUserRequest struct {
+	UserName  string `json:"username" validate:"required"`
+	PToken    string `json:"ptoken" validate:"required"`
+	FirstName string `json:"firstname" validate:"required"`
+	LastName  string `json:"lastname" validate:"required"`
+	Email     string `json:"email" validate:"required"`
+	Phone     string `json:"phone" validate:"required"`
 }
 
-// CreateUserResponse is represent model of a Response for api CreateUser
+// NewRegisterUserRequest is use for create `RegisterUserRequest`
+func NewRegisterUserRequest(username string, pToken string, firstName string, lastName string, email string, phone string) *RegisterUserRequest {
+	return &RegisterUserRequest{
+		UserName:  username,
+		PToken:    pToken,
+		FirstName: firstName,
+		LastName:  lastName,
+		Email:     email,
+		Phone:     phone,
+	}
+}
+
+// CreateUserResponse is represent model of CreateUser Response
 type CreateUserResponse struct {
 	Status     string `json:"status"`
 	StatusDesc string `json:"statusDesc"`
+	UToken     string `json:"utoken"`
 }
 
 // NewCreateUserResponse used for create `CreateUserResponse`
