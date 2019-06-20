@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -9,25 +8,15 @@ const (
 	location = "Asia/Bangkok"
 )
 
-var (
-	timeLocation *time.Location
-)
-
-// InitTimeLocation is used for get local time
-func InitTimeLocation() {
-	tl, _ := time.LoadLocation(location)
-	timeLocation = tl
-
-	timeNow()
+func getTimeStamp() int64 {
+	timeLocation, _ := time.LoadLocation(location)
+	now := time.Now().In(timeLocation)
+	return now.Unix()
 }
 
-func timeNow() {
-	now := time.Now().In(timeLocation)
-	sec := now.Unix()
-	nano := now.UnixNano()
-	fmt.Println(now)
-	fmt.Println(sec)
-	fmt.Println(nano)
+// RegisterUser is a service for record new member
+func RegisterUser() error {
+	return nil
 }
 
 func mashal() {

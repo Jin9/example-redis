@@ -10,18 +10,6 @@ type RegisterUserRequest struct {
 	Phone     string `json:"phone" validate:"required"`
 }
 
-// NewRegisterUserRequest is use for create `RegisterUserRequest`
-func NewRegisterUserRequest(username string, pToken string, firstName string, lastName string, email string, phone string) *RegisterUserRequest {
-	return &RegisterUserRequest{
-		UserName:  username,
-		PToken:    pToken,
-		FirstName: firstName,
-		LastName:  lastName,
-		Email:     email,
-		Phone:     phone,
-	}
-}
-
 // CreateUserResponse is represent model of CreateUser Response
 type CreateUserResponse struct {
 	Status     string `json:"status"`
