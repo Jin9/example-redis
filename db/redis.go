@@ -76,3 +76,39 @@ func CheckUserNameIsExists(key string) bool {
 	}
 	return false
 }
+
+// GetExistsKey is used to check key in redis server is exists
+func GetExistsKey(key string) (bool, error) {
+	client, err := createNewClient()
+
+	if err != nil {
+		log.Println(err.Error())
+		return false, errors.New("Connect to redis fail")
+	}
+
+	val, err := client.Exists(key).Result()
+	if err != nil {
+		log.Println(err.Error())
+		return false, errors.New("Cannot get exists key")
+	}
+
+	return val == 1, nil
+}
+
+// DelData is used for delete some key
+func DelData(key string) error {
+	client, err := createNewClient()
+
+	if err != nil {
+		log.Println(err.Error())
+		return errors.New("Connect to redis fail")
+	}
+
+	_, err = client.Del(key).Result()
+	if err != nil {
+		log.Println(err.Error())
+		return errors.New("Cannot delete key")
+	}
+
+	return nil
+}

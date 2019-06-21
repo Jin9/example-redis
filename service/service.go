@@ -52,12 +52,16 @@ func saveUser(user *model.RegisterUserRequest) error {
 
 // RegisterUser is a service for record new member
 func RegisterUser(user *model.RegisterUserRequest) error {
-	if db.CheckUserNameIsExists(user.UserName) {
-		return errors.New("This username is alerady exists")
-	}
-	if err := db.RegisterNewUser(user); err != nil {
+	val, err := db.GetExistsKey(user.UserName)
+	if err != nil {
 		return err
 	}
+	if val {
+		return errors.New("This username is alerady exists")
+	}
+	// if err := db.RegisterNewUser(user); err != nil {
+	// 	return err
+	// }
 	if err := saveUser(user); err != nil {
 		return err
 	}
