@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -40,12 +41,24 @@ func hashUUID(keyValue string) (string, error) {
 	return fmt.Sprintf("%x", keyBytes), nil
 }
 
+func saveUser(user *model.RegisterUserRequest) error {
+	u := model.NewUser("", 0, user.Email, user.Phone)
+	val, _ := json.Marshal(u)
+	if err := db.SetData(user.UserName, val, 0); err != nil {
+		return err
+	}
+	return nil
+}
+
 // RegisterUser is a service for record new member
 func RegisterUser(user *model.RegisterUserRequest) error {
 	if db.CheckUserNameIsExists(user.UserName) {
-		return errors.New("This user is alerady exists")
+		return errors.New("This username is alerady exists")
 	}
 	if err := db.RegisterNewUser(user); err != nil {
+		return err
+	}
+	if err := saveUser(user); err != nil {
 		return err
 	}
 	return nil

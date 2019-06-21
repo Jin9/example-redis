@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -33,11 +34,13 @@ func SetData(key string, value interface{}, dur time.Duration) error {
 	client, err := createNewClient()
 
 	if err != nil {
+		log.Println(err.Error())
 		return errors.New("Connect to redis fail")
 	}
 
 	err = client.Set(key, value, dur).Err()
 	if err != nil {
+		log.Println(err.Error())
 		return errors.New("Cannot set value to memory")
 	}
 
@@ -49,13 +52,16 @@ func GetData(key string) (string, error) {
 	client, err := createNewClient()
 
 	if err != nil {
+		log.Println(err.Error())
 		return "", errors.New("Connect to redis fail")
 	}
 
 	value, err := client.Get(key).Result()
 	if err == redis.Nil {
+		log.Println(err.Error())
 		return "", errors.New("Key is not exists")
 	} else if err != nil {
+		log.Println(err.Error())
 		return "", errors.New("Cannot get value from memory")
 	}
 
