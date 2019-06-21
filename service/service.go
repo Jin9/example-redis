@@ -51,6 +51,18 @@ func saveUser(user *model.RegisterUserRequest) error {
 	return nil
 }
 
+func validateUser(user *model.RegisterUserRequest) error {
+	val, err := db.GetExistsKey(user.UserName)
+	if err != nil {
+		return err
+	}
+	if val {
+		log.Println("Username is alerady exists")
+		return errors.New("Username is alerady exists")
+	}
+	return nil
+}
+
 // RegisterUser is a service for record new member
 func RegisterUser(user *model.RegisterUserRequest) error {
 	val, err := db.GetExistsKey(user.UserName)
