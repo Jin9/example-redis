@@ -11,10 +11,13 @@ require (
 	github.com/klauspost/cpuid v1.2.1 // indirect
 	github.com/labstack/echo/v4 v4.1.6
 	github.com/leodido/go-urn v1.1.0 // indirect
+	github.com/lib/pq v1.1.1
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
+	github.com/satori/go.uuid v1.2.0
 	github.com/valyala/fasthttp v1.3.0
-	golang.org/x/crypto v0.0.0-20190617133340-57b3e21c3d56 // indirect
+	gitlab.com/chinnawat.w/golang-service-demo v0.0.0-20190424064551-4239393c81a0 // indirect
+	golang.org/x/crypto v0.0.0-20190617133340-57b3e21c3d56
 	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980 // indirect
 	golang.org/x/sys v0.0.0-20190616124812-15dcb6c0061f // indirect
 	golang.org/x/tools v0.0.0-20190617190820-da514acc4774 // indirect

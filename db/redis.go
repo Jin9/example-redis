@@ -61,3 +61,12 @@ func GetData(key string) (string, error) {
 
 	return value, nil
 }
+
+// CheckUserNameIsExists is used to check key in redis server is exists
+func CheckUserNameIsExists(key string) bool {
+	value, _ := GetData(key)
+	if value != "" {
+		return true
+	}
+	return false
+}

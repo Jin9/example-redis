@@ -1,7 +1,16 @@
 package service
 
 import (
+	"errors"
+	"fmt"
+	"strings"
 	"time"
+
+	"wasabi/db"
+	"wasabi/model"
+
+	uuid "github.com/satori/go.uuid"
+	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -14,8 +23,31 @@ func getTimeStamp() int64 {
 	return now.Unix()
 }
 
+func generateToken() string {
+	return strings.ReplaceAll(uuid.NewV4().String(), "-", "")
+}
+
+func hashUUID(keyValue string) (string, error) {
+	h := sha3.New256()
+
+	_, err := h.Write([]byte(keyValue))
+
+	if err != nil {
+		return "", err
+	}
+
+	keyBytes := h.Sum(nil)
+	return fmt.Sprintf("%x", keyBytes), nil
+}
+
 // RegisterUser is a service for record new member
-func RegisterUser() error {
+func RegisterUser(user *model.RegisterUserRequest) error {
+	if db.CheckUserNameIsExists(user.UserName) {
+		return errors.New("This user is alerady exists")
+	}
+	if err := db.RegisterNewUser(user); err != nil {
+		return err
+	}
 	return nil
 }
 

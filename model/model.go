@@ -24,3 +24,21 @@ func NewCreateUserResponse(status string, statusDesc string) *CreateUserResponse
 		StatusDesc: statusDesc,
 	}
 }
+
+// User is represent model of User
+type User struct {
+	UToken         string `json:"uToken"`
+	AccessExpireIn int64  `json:"accessExpireIn"`
+	Email          string `json:"email"`
+	Phone          string `json:"phone"`
+}
+
+// NewUser is for allocate new user model
+func NewUser(uToken string, accessExpireIn int64, email string, phone string) *User {
+	return &User{
+		UToken:         uToken,
+		AccessExpireIn: accessExpireIn,
+		Email:          email,
+		Phone:          phone,
+	}
+}
