@@ -1,5 +1,19 @@
 package model
 
+// ErrorResponse is represent model of error response
+type ErrorResponse struct {
+	StatusCode string `json:"statusCode"`
+	StatusDesc string `json:"statusDesc"`
+}
+
+// NewErrorResponse is used for allocate new Error response model
+func NewErrorResponse(statusCode string, statusDesc string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode: statusCode,
+		StatusDesc: statusDesc,
+	}
+}
+
 // RegisterUserRequest is represent model of CreateUser Request
 type RegisterUserRequest struct {
 	UserName  string `json:"username" validate:"required"`

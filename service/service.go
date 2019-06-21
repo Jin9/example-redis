@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -57,11 +58,12 @@ func RegisterUser(user *model.RegisterUserRequest) error {
 		return err
 	}
 	if val {
-		return errors.New("This username is alerady exists")
+		log.Println("Username is alerady exists")
+		return errors.New("Username is alerady exists")
 	}
-	// if err := db.RegisterNewUser(user); err != nil {
-	// 	return err
-	// }
+	if err := db.RegisterNewUser(user); err != nil {
+		return err
+	}
 	if err := saveUser(user); err != nil {
 		return err
 	}

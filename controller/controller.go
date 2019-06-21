@@ -39,10 +39,10 @@ func validateRequest(c echo.Context, request interface{}) error {
 func RegisterUser(c echo.Context) error {
 	user := new(model.RegisterUserRequest)
 	if err := validateRequest(c, user); err != nil {
-		return c.JSON(fasthttp.StatusBadRequest, err.Error())
+		return c.JSON(fasthttp.StatusBadRequest, model.NewErrorResponse("2002", err.Error()))
 	}
 	if err := service.RegisterUser(user); err != nil {
-		return c.JSON(fasthttp.StatusInternalServerError, err.Error())
+		return c.JSON(fasthttp.StatusInternalServerError, model.NewErrorResponse("2002", err.Error()))
 	}
 	return c.JSON(fasthttp.StatusOK, user)
 }
