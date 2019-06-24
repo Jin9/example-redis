@@ -11,14 +11,13 @@ import (
 const (
 	addr     = "localhost:6379"
 	password = ""
-	db       = 0
 )
 
-func createNewClient() (*redis.Client, error) {
+func createNewClient(channel int) (*redis.Client, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
-		DB:       db,
+		DB:       channel,
 	})
 
 	_, err := client.Ping().Result()
@@ -30,8 +29,8 @@ func createNewClient() (*redis.Client, error) {
 }
 
 // SetData is used for store data to redis
-func SetData(key string, value interface{}, dur time.Duration) error {
-	client, err := createNewClient()
+func SetData(key string, value interface{}, dur time.Duration, channel int) error {
+	client, err := createNewClient(channel)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -48,8 +47,8 @@ func SetData(key string, value interface{}, dur time.Duration) error {
 }
 
 // GetData is used for get data from redis
-func GetData(key string) (string, error) {
-	client, err := createNewClient()
+func GetData(key string, channel int) (string, error) {
+	client, err := createNewClient(channel)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -69,8 +68,8 @@ func GetData(key string) (string, error) {
 }
 
 // GetExistsKey is used to check key in redis server is exists
-func GetExistsKey(key string) (bool, error) {
-	client, err := createNewClient()
+func GetExistsKey(key string, channel int) (bool, error) {
+	client, err := createNewClient(channel)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -87,8 +86,8 @@ func GetExistsKey(key string) (bool, error) {
 }
 
 // DelData is used for delete some key
-func DelData(key string) error {
-	client, err := createNewClient()
+func DelData(key string, channel int) error {
+	client, err := createNewClient(channel)
 
 	if err != nil {
 		log.Println(err.Error())

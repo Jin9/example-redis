@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"wasabi/constant"
 	"wasabi/db"
 	"wasabi/model"
 
@@ -29,30 +30,51 @@ func generateToken() string {
 	return strings.ReplaceAll(uuid.NewV4().String(), "-", "")
 }
 
-func hashUUID(keyValue string) (string, error) {
+func hashValue(keyValue string) (string, error) {
 	h := sha3.New256()
 
 	_, err := h.Write([]byte(keyValue))
 
 	if err != nil {
-		return "", err
+		log.Println(err.Error())
+		return "", errors.New("Cannot hash value")
 	}
 
 	keyBytes := h.Sum(nil)
 	return fmt.Sprintf("%x", keyBytes), nil
 }
 
-func saveUser(user *model.RegisterUserRequest) error {
-	u := model.NewUser("", 0, user.Email, user.Phone)
-	val, _ := json.Marshal(u)
-	if err := db.SetData(user.UserName, val, 0); err != nil {
+func prepareUToken(username string) (string, error) {
+	keyValue := fmt.Sprintf("%v%v", generateToken(), username)
+	hashKeyValue, err := hashValue(keyValue)
+	if err != nil {
+		return "", err
+	}
+	return hashKeyValue, nil
+}
+
+func prepareUser(username string, ptoken string) error {
+	utoken, err := prepareUToken(username)
+	if err != nil {
+		return err
+	}
+	if err = saveUser(utoken, ptoken, username); err != nil {
 		return err
 	}
 	return nil
 }
 
-func validateUser(user *model.RegisterUserRequest) error {
-	val, err := db.GetExistsKey(user.UserName)
+func saveUser(utoken string, ptoken string, username string) error {
+	u := model.NewUser(utoken, ptoken)
+	val, _ := json.Marshal(u)
+	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateUser(username string) error {
+	val, err := db.GetExistsKey(username, constant.UserDB)
 	if err != nil {
 		return err
 	}
@@ -65,18 +87,13 @@ func validateUser(user *model.RegisterUserRequest) error {
 
 // RegisterUser is a service for record new member
 func RegisterUser(user *model.RegisterUserRequest) error {
-	val, err := db.GetExistsKey(user.UserName)
-	if err != nil {
+	if err := validateUser(user.UserName); err != nil {
 		return err
-	}
-	if val {
-		log.Println("Username is alerady exists")
-		return errors.New("Username is alerady exists")
 	}
 	if err := db.RegisterNewUser(user); err != nil {
 		return err
 	}
-	if err := saveUser(user); err != nil {
+	if err := prepareUser(user.UserName, user.PToken); err != nil {
 		return err
 	}
 	return nil
