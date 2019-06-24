@@ -99,6 +99,47 @@ func RegisterUser(user *model.RegisterUserRequest) error {
 	return nil
 }
 
+func matchUser(username string, ptoken string) (string, error) {
+	val, err := db.GetData(username, constant.UserDB)
+	if err != nil {
+		log.Println(err)
+		return "", errors.New("Invalid User or Password")
+	}
+
+	data := &model.User{}
+	json.Unmarshal([]byte(val), &data)
+	if data.PToken != ptoken {
+		log.Println("password not match")
+		return "", errors.New("Invalid User or Password")
+	}
+
+	return data.UToken, nil
+}
+
+func createAccessToken(utoken string) (string, error) {
+	atoken, err := hashValue(generateToken())
+	if err != nil {
+		return "", err
+	}
+	if err := db.SetData(atoken, utoken, 5*60*time.Second, constant.AccessDB); err != nil {
+		return "", err
+	}
+	return atoken, nil
+}
+
+// LoginUser is a service for using login
+func LoginUser(user *model.LoginUserRequest) (string, error) {
+	utoken, err := matchUser(user.Username, user.PToken)
+	if err != nil {
+		return "", err
+	}
+	atoken, err := createAccessToken(utoken)
+	if err != nil {
+		return "", err
+	}
+	return atoken, nil
+}
+
 func mashal() {
 	// u := &User{
 	// 	FirstName: "Adam",

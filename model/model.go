@@ -26,15 +26,15 @@ type RegisterUserRequest struct {
 
 // CreateUserResponse is represent model of CreateUser Response
 type CreateUserResponse struct {
-	Status     string `json:"status"`
+	StatusCode string `json:"statusCode"`
 	StatusDesc string `json:"statusDesc"`
 	UToken     string `json:"utoken"`
 }
 
 // NewCreateUserResponse used for create `CreateUserResponse`
-func NewCreateUserResponse(status string, statusDesc string) *CreateUserResponse {
+func NewCreateUserResponse(statusCode string, statusDesc string) *CreateUserResponse {
 	return &CreateUserResponse{
-		Status:     status,
+		StatusCode: statusCode,
 		StatusDesc: statusDesc,
 	}
 }
@@ -50,5 +50,27 @@ func NewUser(uToken string, ptoken string) *User {
 	return &User{
 		UToken: uToken,
 		PToken: ptoken,
+	}
+}
+
+// LoginUserRequest is represent Login Request
+type LoginUserRequest struct {
+	Username string `json:"username"`
+	PToken   string `json:"ptoken"`
+}
+
+// LoginUserResponse is represent Login Response
+type LoginUserResponse struct {
+	StatusCode string `json:"statusCode"`
+	StatusDesc string `json:"statusDesc"`
+	AToken     string `json:"aToken"`
+}
+
+// NewLoginUserResponse is used for create new Login User Response
+func NewLoginUserResponse(statusCode string, statusDesc string, aToken string) *LoginUserResponse {
+	return &LoginUserResponse{
+		StatusCode: statusCode,
+		StatusDesc: statusDesc,
+		AToken:     aToken,
 	}
 }

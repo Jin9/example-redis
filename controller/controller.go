@@ -44,10 +44,18 @@ func RegisterUser(c echo.Context) error {
 	if err := service.RegisterUser(user); err != nil {
 		return c.JSON(fasthttp.StatusInternalServerError, model.NewErrorResponse("2002", err.Error()))
 	}
-	return c.JSON(fasthttp.StatusOK, user)
+	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
 }
 
-// // LoginUser is controller for log-in user
-// func LoginUser(c echo.Context) error {
-// 	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
-// }
+// LoginUser is controller for log-in user
+func LoginUser(c echo.Context) error {
+	user := new(model.LoginUserRequest)
+	if err := validateRequest(c, user); err != nil {
+		return c.JSON(fasthttp.StatusBadRequest, model.NewErrorResponse("2002", err.Error()))
+	}
+	atoken, err := service.LoginUser(user)
+	if err != nil {
+		return c.JSON(fasthttp.StatusBadRequest, model.NewErrorResponse("2002", err.Error()))
+	}
+	return c.JSON(fasthttp.StatusOK, model.NewLoginUserResponse("0", "Success", atoken))
+}
