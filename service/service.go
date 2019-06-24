@@ -53,7 +53,7 @@ func prepareUToken(username string) (string, error) {
 	return hashKeyValue, nil
 }
 
-func prepareUser(username string, ptoken string) error {
+func processSaveUser(username string, ptoken string) error {
 	utoken, err := prepareUToken(username)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func prepareUser(username string, ptoken string) error {
 }
 
 func saveUser(username string, utoken string, ptoken string) error {
-	u := model.NewUser(utoken, ptoken)
+	u := model.NewUser(utoken, ptoken, false)
 	val, _ := json.Marshal(u)
 	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
 		return err
@@ -93,7 +93,7 @@ func RegisterUser(user *model.RegisterUserRequest) error {
 	if err := db.RegisterNewUser(user); err != nil {
 		return err
 	}
-	if err := prepareUser(user.UserName, user.PToken); err != nil {
+	if err := processSaveUser(user.UserName, user.PToken); err != nil {
 		return err
 	}
 	return nil
@@ -111,6 +111,10 @@ func matchUser(username string, ptoken string) (string, error) {
 	if data.PToken != ptoken {
 		log.Println("password not match")
 		return "", errors.New("Invalid User or Password")
+	}
+	if data.IsLogedIn {
+		log.Println("this user is loged in")
+		return "", errors.New("User is already loged in")
 	}
 
 	return data.UToken, nil

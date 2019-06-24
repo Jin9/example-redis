@@ -41,15 +41,17 @@ func NewCreateUserResponse(statusCode string, statusDesc string) *CreateUserResp
 
 // User is represent model of User
 type User struct {
-	UToken string `json:"uToken"`
-	PToken string `json:"pToken"`
+	UToken    string `json:"uToken"`
+	PToken    string `json:"pToken"`
+	IsLogedIn bool   `json:"isLogedIn"`
 }
 
 // NewUser is for allocate new user model
-func NewUser(uToken string, ptoken string) *User {
+func NewUser(uToken string, ptoken string, isLogedIn bool) *User {
 	return &User{
-		UToken: uToken,
-		PToken: ptoken,
+		UToken:    uToken,
+		PToken:    ptoken,
+		IsLogedIn: isLogedIn,
 	}
 }
 

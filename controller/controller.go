@@ -59,3 +59,8 @@ func LoginUser(c echo.Context) error {
 	}
 	return c.JSON(fasthttp.StatusOK, model.NewLoginUserResponse("0", "Success", atoken))
 }
+
+// LogOutUser is controller for log-out user
+func LogOutUser(c echo.Context) error {
+	return c.JSON(fasthttp.StatusOK, model.NewErrorResponse("0", "Success"))
+}
