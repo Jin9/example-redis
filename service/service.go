@@ -58,13 +58,13 @@ func prepareUser(username string, ptoken string) error {
 	if err != nil {
 		return err
 	}
-	if err = saveUser(utoken, ptoken, username); err != nil {
+	if err = saveUser(username, utoken, ptoken); err != nil {
 		return err
 	}
 	return nil
 }
 
-func saveUser(utoken string, ptoken string, username string) error {
+func saveUser(username string, utoken string, ptoken string) error {
 	u := model.NewUser(utoken, ptoken)
 	val, _ := json.Marshal(u)
 	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
