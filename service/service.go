@@ -144,6 +144,18 @@ func LoginUser(user *model.LoginUserRequest) (string, error) {
 	return atoken, nil
 }
 
+// LogOutUser is a service for using logout
+func LogOutUser(atoken string) error {
+	result, err := db.GetData(atoken, constant.AccessDB)
+	if err != nil {
+		if err.Error() != "Key is not exists" {
+			return err
+		}
+	}
+	fmt.Println(result)
+	return nil
+}
+
 func mashal() {
 	// u := &User{
 	// 	FirstName: "Adam",
