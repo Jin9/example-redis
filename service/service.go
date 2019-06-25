@@ -99,7 +99,7 @@ func RegisterUser(user *model.RegisterUserRequest) error {
 	return nil
 }
 
-func matchUser(username string, ptoken string) (string, error) {
+func matchPToken(username string, ptoken string) (string, error) {
 	val, err := db.GetData(username, constant.UserDB)
 	if err != nil {
 		log.Println(err)
@@ -112,22 +112,45 @@ func matchUser(username string, ptoken string) (string, error) {
 		log.Println("password not match")
 		return "", errors.New("Invalid User or Password")
 	}
-	if _, err = db.GetData(data.UToken, constant.UserTokenDB); err != nil {
-		log.Println("this user is loged in")
-		return "", errors.New("This account is already loged in")
-	}
-
 	return data.UToken, nil
 }
 
+func checkAuthenticated(utoken string) error {
+	isLogedIn, err := db.GetExistsKey(utoken, constant.UserTokenDB)
+	if err != nil {
+		return err
+	}
+	if isLogedIn {
+		log.Println("this user is loged in")
+		return errors.New("This account is already loged in")
+	}
+	return nil
+}
+
+func matchUser(username string, ptoken string) (string, error) {
+
+	utoken, err := matchPToken(username, ptoken)
+	if err != nil {
+		return "", err
+	}
+
+	if err := checkAuthenticated(utoken); err != nil {
+		return "", err
+	}
+
+	return utoken, nil
+}
+
 func createAccessToken() (*model.AccessToken, error) {
-	atoken := generateToken()
+	atoken, err := hashValue(generateToken())
+	if err != nil {
+		return nil, err
+	}
 	hashAtoken, err := hashValue(atoken)
 	if err != nil {
 		return nil, err
 	}
-	accessToken := model.NewAccessToken(atoken, hashAtoken)
-	return accessToken, nil
+	return model.NewAccessToken(atoken, hashAtoken), nil
 }
 
 func saveUserToken(username string, utoken string, atoken string) error {
