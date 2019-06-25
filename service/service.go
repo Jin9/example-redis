@@ -158,14 +158,26 @@ func LoginUser(user *model.LoginUserRequest) (string, error) {
 	return atoken, nil
 }
 
+func clearUserSession(atoken string, utoken string) error {
+	if err := db.DelData(atoken, constant.AccessDB); err != nil {
+		return err
+	}
+	if err := db.DelData(utoken, constant.UserTokenDB); err != nil {
+		return err
+	}
+	return nil
+}
+
 // LogOutUser is a service for using logout
 func LogOutUser(atoken string) error {
-	result, err := db.GetData(atoken, constant.AccessDB)
-	if err != nil {
-		if err.Error() != "Key is not exists" {
-			return err
+	utoken, err := db.GetData(atoken, constant.AccessDB)
+	if err != nil && err.Error() != "Key is not exists" {
+		return err
+	}
+	if utoken != "" {
+		if err = clearUserSession(atoken, utoken); err != nil {
+			return nil
 		}
 	}
-	fmt.Println(result)
 	return nil
 }
