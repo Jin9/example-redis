@@ -65,7 +65,7 @@ func processSaveUser(username string, ptoken string) error {
 }
 
 func saveUser(username string, utoken string, ptoken string) error {
-	u := model.NewUser(utoken, ptoken, false)
+	u := model.NewUser(utoken, ptoken)
 	val, _ := json.Marshal(u)
 	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
 		return err
@@ -112,23 +112,32 @@ func matchUser(username string, ptoken string) (string, error) {
 		log.Println("password not match")
 		return "", errors.New("Invalid User or Password")
 	}
-	if data.IsLogedIn {
+	if _, err = db.GetData(data.UToken, constant.UserTokenDB); err != nil {
 		log.Println("this user is loged in")
-		return "", errors.New("User is already loged in")
+		return "", errors.New("This account is already loged in")
 	}
 
 	return data.UToken, nil
 }
 
-func createAccessToken(utoken string) (string, error) {
+func createAccessToken() (string, error) {
 	atoken, err := hashValue(generateToken())
 	if err != nil {
 		return "", err
 	}
-	if err := db.SetData(atoken, utoken, 5*60*time.Second, constant.AccessDB); err != nil {
-		return "", err
-	}
 	return atoken, nil
+}
+
+func saveUserToken(username string, utoken string, atoken string) error {
+	u := model.NewUserToken(username, atoken)
+	val, _ := json.Marshal(u)
+	if err := db.SetData(utoken, val, 15*60*time.Second, constant.UserTokenDB); err != nil {
+		return err
+	}
+	if err := db.SetData(atoken, utoken, 15*60*time.Second, constant.AccessDB); err != nil {
+		return err
+	}
+	return nil
 }
 
 // LoginUser is a service for using login
@@ -137,13 +146,15 @@ func LoginUser(user *model.LoginUserRequest) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err = db.SetData(utoken, user.Username, 0, constant.UserTokenDB); err != nil {
-		return "", err
-	}
-	atoken, err := createAccessToken(utoken)
+	atoken, err := createAccessToken()
 	if err != nil {
 		return "", err
 	}
+
+	if err = saveUserToken(user.Username, utoken, atoken); err != nil {
+		return "", err
+	}
+
 	return atoken, nil
 }
 
@@ -157,21 +168,4 @@ func LogOutUser(atoken string) error {
 	}
 	fmt.Println(result)
 	return nil
-}
-
-func mashal() {
-	// u := &User{
-	// 	FirstName: "Adam",
-	// 	LastName:  "Smith",
-	// }
-
-	// v, _ := json.Marshal(u)
-
-	// db.SetData("key", v, 3*time.Second)
-	// val := db.GetData("key")
-
-	// data := &User{}
-	// json.Unmarshal([]byte(val), &data)
-
-	// fmt.Println(data)
 }

@@ -24,16 +24,16 @@ type RegisterUserRequest struct {
 	Phone     string `json:"phone" validate:"required"`
 }
 
-// CreateUserResponse is represent model of CreateUser Response
-type CreateUserResponse struct {
+// RegisterUserResponse is represent model of CreateUser Response
+type RegisterUserResponse struct {
 	StatusCode string `json:"statusCode"`
 	StatusDesc string `json:"statusDesc"`
 	UToken     string `json:"utoken"`
 }
 
-// NewCreateUserResponse used for create `CreateUserResponse`
-func NewCreateUserResponse(statusCode string, statusDesc string) *CreateUserResponse {
-	return &CreateUserResponse{
+// NewRegisterUserResponse used for create `RegisterUserResponse`
+func NewRegisterUserResponse(statusCode string, statusDesc string) *RegisterUserResponse {
+	return &RegisterUserResponse{
 		StatusCode: statusCode,
 		StatusDesc: statusDesc,
 	}
@@ -41,17 +41,29 @@ func NewCreateUserResponse(statusCode string, statusDesc string) *CreateUserResp
 
 // User is represent model of User
 type User struct {
-	UToken    string `json:"uToken"`
-	PToken    string `json:"pToken"`
-	IsLogedIn bool   `json:"isLogedIn"`
+	UToken string `json:"uToken"`
+	PToken string `json:"pToken"`
 }
 
 // NewUser is for allocate new user model
-func NewUser(uToken string, ptoken string, isLogedIn bool) *User {
+func NewUser(uToken string, ptoken string) *User {
 	return &User{
-		UToken:    uToken,
-		PToken:    ptoken,
-		IsLogedIn: isLogedIn,
+		UToken: uToken,
+		PToken: ptoken,
+	}
+}
+
+// UserToken is represent of model UToken in redis db
+type UserToken struct {
+	Username string `json:"username"`
+	AToken   string `json:"atoken"`
+}
+
+// NewUserToken is used for create new model of UserToken
+func NewUserToken(username string, atoken string) *UserToken {
+	return &UserToken{
+		Username: username,
+		AToken:   atoken,
 	}
 }
 

@@ -44,7 +44,7 @@ func RegisterUser(c echo.Context) error {
 	if err := service.RegisterUser(user); err != nil {
 		return c.JSON(fasthttp.StatusInternalServerError, model.NewErrorResponse("2002", err.Error()))
 	}
-	return c.JSON(fasthttp.StatusOK, model.NewCreateUserResponse("0", "Success"))
+	return c.JSON(fasthttp.StatusOK, model.NewRegisterUserResponse("0", "Success"))
 }
 
 // LoginUser is controller for log-in user
