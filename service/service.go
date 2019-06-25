@@ -53,21 +53,21 @@ func prepareUToken(username string) (string, error) {
 	return hashKeyValue, nil
 }
 
+func saveUser(username string, utoken string, ptoken string) error {
+	u := model.NewUser(utoken, ptoken)
+	val, _ := json.Marshal(u)
+	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
+		return err
+	}
+	return nil
+}
+
 func processSaveUser(username string, ptoken string) error {
 	utoken, err := prepareUToken(username)
 	if err != nil {
 		return err
 	}
 	if err = saveUser(username, utoken, ptoken); err != nil {
-		return err
-	}
-	return nil
-}
-
-func saveUser(username string, utoken string, ptoken string) error {
-	u := model.NewUser(utoken, ptoken)
-	val, _ := json.Marshal(u)
-	if err := db.SetData(username, val, 0, constant.UserDB); err != nil {
 		return err
 	}
 	return nil

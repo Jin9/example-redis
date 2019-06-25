@@ -28,7 +28,6 @@ type RegisterUserRequest struct {
 type RegisterUserResponse struct {
 	StatusCode string `json:"statusCode"`
 	StatusDesc string `json:"statusDesc"`
-	UToken     string `json:"utoken"`
 }
 
 // NewRegisterUserResponse used for create `RegisterUserResponse`
