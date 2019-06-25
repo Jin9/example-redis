@@ -137,6 +137,9 @@ func LoginUser(user *model.LoginUserRequest) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if err = db.SetData(utoken, user.Username, 0, constant.UserTokenDB); err != nil {
+		return "", err
+	}
 	atoken, err := createAccessToken(utoken)
 	if err != nil {
 		return "", err
