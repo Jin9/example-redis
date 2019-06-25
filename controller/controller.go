@@ -62,5 +62,9 @@ func LoginUser(c echo.Context) error {
 
 // LogOutUser is controller for log-out user
 func LogOutUser(c echo.Context) error {
+	atoken := c.Request().Header.Get("accessToken")
+	if err := service.LogOutUser(atoken); err != nil {
+		return c.JSON(fasthttp.StatusBadRequest, model.NewErrorResponse("2002", err.Error()))
+	}
 	return c.JSON(fasthttp.StatusOK, model.NewErrorResponse("0", "Success"))
 }
