@@ -67,6 +67,20 @@ func NewUserToken(username string, atoken string) *UserToken {
 	}
 }
 
+// AccessToken is represent model of Access token
+type AccessToken struct {
+	AToken     string
+	HashAToken string
+}
+
+// NewAccessToken is used for create AccessToken model
+func NewAccessToken(atoken string, hashAtoken string) *AccessToken {
+	return &AccessToken{
+		AToken:     atoken,
+		HashAToken: hashAtoken,
+	}
+}
+
 // LoginUserRequest is represent Login Request
 type LoginUserRequest struct {
 	Username string `json:"username"`

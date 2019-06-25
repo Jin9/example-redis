@@ -120,12 +120,14 @@ func matchUser(username string, ptoken string) (string, error) {
 	return data.UToken, nil
 }
 
-func createAccessToken() (string, error) {
-	atoken, err := hashValue(generateToken())
+func createAccessToken() (*model.AccessToken, error) {
+	atoken := generateToken()
+	hashAtoken, err := hashValue(atoken)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return atoken, nil
+	accessToken := model.NewAccessToken(atoken, hashAtoken)
+	return accessToken, nil
 }
 
 func saveUserToken(username string, utoken string, atoken string) error {
@@ -146,16 +148,16 @@ func LoginUser(user *model.LoginUserRequest) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	atoken, err := createAccessToken()
+	accessToken, err := createAccessToken()
 	if err != nil {
 		return "", err
 	}
 
-	if err = saveUserToken(user.Username, utoken, atoken); err != nil {
+	if err = saveUserToken(user.Username, utoken, accessToken.HashAToken); err != nil {
 		return "", err
 	}
 
-	return atoken, nil
+	return accessToken.AToken, nil
 }
 
 func clearUserSession(atoken string, utoken string) error {
@@ -170,7 +172,11 @@ func clearUserSession(atoken string, utoken string) error {
 
 // LogOutUser is a service for using logout
 func LogOutUser(atoken string) error {
-	utoken, err := db.GetData(atoken, constant.AccessDB)
+	hashAtoken, err := hashValue(atoken)
+	if err != nil {
+		return err
+	}
+	utoken, err := db.GetData(hashAtoken, constant.AccessDB)
 	if err != nil && err.Error() != "Key is not exists" {
 		return err
 	}
