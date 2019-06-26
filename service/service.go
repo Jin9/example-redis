@@ -156,10 +156,10 @@ func createAccessToken() (*model.AccessToken, error) {
 func saveUserToken(username string, utoken string, atoken string) error {
 	u := model.NewUserToken(username, atoken)
 	val, _ := json.Marshal(u)
-	if err := db.SetData(utoken, val, 60*time.Second, constant.UserTokenDB); err != nil {
+	if err := db.SetData(utoken, val, 30*60*time.Second, constant.UserTokenDB); err != nil {
 		return err
 	}
-	if err := db.SetData(atoken, utoken, 60*time.Second, constant.AccessDB); err != nil {
+	if err := db.SetData(atoken, utoken, 30*60*time.Second, constant.AccessDB); err != nil {
 		return err
 	}
 	return nil
