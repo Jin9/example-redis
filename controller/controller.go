@@ -68,3 +68,8 @@ func LogOutUser(c echo.Context) error {
 	}
 	return c.JSON(fasthttp.StatusOK, model.NewErrorResponse("0", "Success"))
 }
+
+// ExampleData is used for send example get request
+func ExampleData(c echo.Context) error {
+	return c.JSON(fasthttp.StatusOK, model.NewErrorResponse("0", "Success"))
+}
