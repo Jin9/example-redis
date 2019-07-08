@@ -7,6 +7,5 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -mod=vendor -o goapp
 FROM alpine:3.10
 RUN apk --no-cache add ca-certificates
 COPY --from=builder /src/ .
-COPY config .
 EXPOSE 8880
 ENTRYPOINT ["./goapp"]
