@@ -71,5 +71,9 @@ func LogOutUser(c echo.Context) error {
 
 // ExampleData is used for send example get request
 func ExampleData(c echo.Context) error {
-	return c.JSON(fasthttp.StatusOK, model.NewErrorResponse("0", "Success"))
+	exRequest := new(model.ExampleRequest)
+	if err := validateRequest(c, exRequest); err != nil {
+		return c.JSON(fasthttp.StatusBadRequest, model.NewErrorResponse("2002", err.Error()))
+	}
+	return c.JSON(fasthttp.StatusOK, model.NewExampleRequest(exRequest.Username, exRequest.Password))
 }

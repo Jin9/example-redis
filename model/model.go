@@ -101,3 +101,17 @@ func NewLoginUserResponse(statusCode string, statusDesc string, aToken string) *
 		AToken:     aToken,
 	}
 }
+
+// ExampleRequest is
+type ExampleRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+// NewExampleRequest is
+func NewExampleRequest(username string, password string) *ExampleRequest {
+	return &ExampleRequest{
+		Username: username,
+		Password: password,
+	}
+}
