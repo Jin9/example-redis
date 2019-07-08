@@ -8,4 +8,5 @@ FROM alpine:3.10
 RUN apk --no-cache add ca-certificates
 COPY --from=builder /src/ .
 COPY config .
+EXPOSE 8880
 ENTRYPOINT ["./goapp"]
