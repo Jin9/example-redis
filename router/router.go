@@ -22,6 +22,9 @@ func Init() *echo.Echo {
 		v1.POST("/login", controller.LoginUser)
 		v1.POST("/logout", controller.LogOutUser)
 		v1.POST("/getdata", controller.ExampleData)
+		e.GET("/file", func(c echo.Context) error {
+			return c.File("example_file.pdf")
+		})
 	}
 
 	return e
