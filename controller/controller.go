@@ -80,5 +80,5 @@ func ExampleData(c echo.Context) error {
 
 // ExampleFile is used for send file
 func ExampleFile(c echo.Context) error {
-	return c.File("example_file.txt")
+	return c.File("example.txt")
 }
