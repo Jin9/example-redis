@@ -22,7 +22,7 @@ func Init() *echo.Echo {
 		v1.POST("/login", controller.LoginUser)
 		v1.POST("/logout", controller.LogOutUser)
 		v1.POST("/getdata", controller.ExampleData)
-		v1.GET("/file", controller.ExampleFile)
+		// v1.GET("/file", controller.ExampleFile)
 	}
 
 	return e
